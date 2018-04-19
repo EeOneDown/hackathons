@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hackathons</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Place</th>
+            <th>Start date</th>
+            <th>Description</th>
+            <th>Link</th>
+        </tr>
+        {% for hack in hacks %}
+            <tr>
+                <td>{{ hack.name }}</td>
+                <td>{{ hack.place }}</td>
+                <td>{{ hack.date }}</td>
+                <td>{{ hack.description }}</td>
+                <td><a href={{ hack.link }}>{{ hack.link }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
