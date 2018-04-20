@@ -8,17 +8,20 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Integer, index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    captains_teams = db.relationship('Team', backref='captain', lazy='dynamic')
 
-    def __init__(self, email, password):
+    def __init__(self, username, email, password):
+        self.username = username
         self.email = email
-        self.set_password(password)
+        self.__set_password(password)
 
     def __repr__(self):
         return '<User {0} {1}>'.format(self.id, self.email)
 
-    def set_password(self, password):
+    def __set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
@@ -42,3 +45,14 @@ class Hack(db.Model):
 
     def __repr__(self):
         return "<Hackacthon \"{0}\">".format(self.name)
+
+
+class Team(db.Model):
+    __tablename__ = 'teams'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), index=True, unique=True)
+    captain_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return '<Team {0}>'.format(self.name)
